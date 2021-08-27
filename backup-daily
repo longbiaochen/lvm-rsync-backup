@@ -48,6 +48,7 @@ fi
 # quiet times (early hours) and make sure this script completes
 # gracefully if a frozen snapshot is encountered.
 #
+echo lvcreate -L${BUFFER_SIZE} -s -n ${SNAPSHOT_NAME} ${BACKUP_VOLUME}
 lvcreate -L${BUFFER_SIZE} -s -n ${SNAPSHOT_NAME} ${BACKUP_VOLUME}
 
 ### Create the backup logical volume
@@ -68,13 +69,13 @@ fi
 ### Create the backup mount directory if necessary
 #
 if [ ! -d ${BACKUP_MOUNT} ] ; then
-mkdir ${BACKUP_MOUNT}
+mkdir -p  ${BACKUP_MOUNT}
 fi
 
 ### Create the snapshot mount-point
 #
 if [ ! -d ${SNAPSHOT_MOUNT} ] ; then
-mkdir ${SNAPSHOT_MOUNT}
+mkdir -p ${SNAPSHOT_MOUNT}
 fi
 
 ### Protect the snapshot mount-point
@@ -83,7 +84,8 @@ chmod go-rwx ${SNAPSHOT_MOUNT}
 
 ### Mount the snapshot read-only
 #
-mount -o nouuid,ro ${SNAPSHOT_DEVICE} ${SNAPSHOT_MOUNT}
+echo mount -o ro ${SNAPSHOT_DEVICE} ${SNAPSHOT_MOUNT}
+mount -o ro ${SNAPSHOT_DEVICE} ${SNAPSHOT_MOUNT}
 
 ./make_backup_rw ${BACKUP_VOLUME} ${BACKUP_MOUNT} || exit 1
 
@@ -126,7 +128,7 @@ rmdir ${BACKUP_RW_MOUNT}
 # This will only usually be necessary on the first run of this script.
 #
 if [ ! -d ${BACKUP_RO_MOUNT} ] ; then
-mkdir ${BACKUP_RO_MOUNT}
+mkdir -p ${BACKUP_RO_MOUNT}
 fi
 
 ### Attempt to mount the RO mount point
