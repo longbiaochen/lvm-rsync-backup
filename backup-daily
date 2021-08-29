@@ -50,8 +50,8 @@ fi
 if [ ! -h ${BACKUP_VOLUME} ] ; then
 lvcreate -L${BACKUP_SIZE} -n ${BACKUP_VOLUME} -Wy
 mkfs.ext4 ${BACKUP_VOLUME}
-mount ${BACKUP_VOLUME} ${BACKUP_MOUNT}
 fi
+mount ${BACKUP_VOLUME} ${BACKUP_MOUNT}
 
 echo "Updating backup..."
 ### Delete the oldest daily backup, if it exists
